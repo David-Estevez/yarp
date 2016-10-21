@@ -232,7 +232,27 @@ bool yarp::dev::OpenNI2DeviceDriverServer::open(yarp::os::Searchable& config) {
         autoExposureON = true;
     }
 
-    skeleton = new OpenNI2SkeletonTracker(userTracking, colorON, rgbMirrorON, depthMirrorON, mConf, oniPlayback, fileDevice, oniRecord, oniOutputFile, loop, frameSync, imageRegistration, printMode, dMode, cMode, autoWhiteBalanceON, autoExposureON);
+    if(config.check("exposure", "Set exposure value (default=0)")) {
+        withChangedExposure = true;
+        exposure = config.find("exposure").asInt();
+    } else {
+        withChangedExposure = false;
+        exposure = DEFAULT_EXPOSURE;
+    }
+
+    if(config.check("gain", "Set gain value (default=100)")) {
+        withChangedGain = true;
+        gain = config.find("gain").asInt();
+    } else {
+        withChangedGain = false;
+        gain = DEFAULT_GAIN;
+    }
+
+    skeleton = new OpenNI2SkeletonTracker(userTracking, colorON, rgbMirrorON, depthMirrorON, mConf,
+                                          oniPlayback, fileDevice, oniRecord, oniOutputFile, loop,
+                                          frameSync, imageRegistration, printMode, dMode, cMode,
+                                          autoWhiteBalanceON, autoExposureON,
+                                          withChangedExposure, exposure, withChangedGain, gain);
 
     if (skeleton->getDeviceStatus() == 0) {
         cout << "OpenNI2 Yarp Device started." << endl;

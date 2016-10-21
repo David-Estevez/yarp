@@ -76,7 +76,9 @@ public:
                            string withOniOutputFile = "", bool withLoop = false, bool withFrameSync = false,
                            bool withImageRegistration = false,
                            bool prMode = false, int depthMode = DEFAULT_DEPTH_MODE, int colorMode = DEFAULT_COLOR_MODE,
-                           bool withAutoWhiteBalanceON = true, bool withAutoExposureON = true);
+                           bool withAutoWhiteBalanceON = true, bool withAutoExposureON = true,
+                           bool withChangedExposure = false, int exposure = 0,
+                           bool withChangedGain = false, int gain = 100);
 
     ~OpenNI2SkeletonTracker(void);
     void close();
@@ -99,6 +101,8 @@ private:
     bool oniPlayback, oniRecord;
     bool loop, frameSync, imageRegistration, printMode;
     bool autoExposureON, autoWhiteBalanceON;
+    bool exposureChange, gainChange;
+    int exposure, gain;
     int deviceStatus;
     double minConfidence;
     string fileDevice;

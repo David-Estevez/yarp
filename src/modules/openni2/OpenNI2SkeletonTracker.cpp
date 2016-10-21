@@ -17,7 +17,9 @@ OpenNI2SkeletonTracker::OpenNI2SkeletonTracker(bool withTracking, bool withColor
                                                string withFileDevice, bool withOniRecord, string withOniOutputFile,
                                                bool withLoop, bool withFrameSync, bool withImageRegistration,
                                                bool prMode, int depthMode, int colorMode,
-                                               bool withAutoWhiteBalanceON, bool withAutoExposureON)
+                                               bool withAutoWhiteBalanceON, bool withAutoExposureON,
+                                               bool withChangedExposure, int exposure,
+                                               bool withChangedGain, int gain)
 {
     userTracking= withTracking;
     colorON = withColorOn;
@@ -51,6 +53,10 @@ OpenNI2SkeletonTracker::OpenNI2SkeletonTracker(bool withTracking, bool withColor
     imageRegistration = withImageRegistration;
     autoExposureON = withAutoExposureON;
     autoWhiteBalanceON = withAutoWhiteBalanceON;
+    exposureChange = withChangedExposure;
+    this->exposure = exposure;
+    gainChange = withChangedGain;
+    this->gain = gain;
     init();
     initVars();
 }
@@ -312,6 +318,50 @@ int OpenNI2SkeletonTracker::init(){
                 }
             }
 
+            // If not playback, set exposure value (default: 0)
+            if (!oniPlayback)
+            {
+                if (exposureChange)
+                {
+                    if (autoExposureON || autoWhiteBalanceON)
+                    {
+                        cout << "WARNING: Exposure cannot be set with Auto Exposure and Auto White Balance on" << endl;
+                    }
+                    else
+                    {
+                        openni::Status result = imageStream.getCameraSettings()->setExposure(exposure);
+                        int newExposure = imageStream.getCameraSettings()->getExposure();
+                        if (result == openni::STATUS_OK && exposure == newExposure)
+                            cout << "Exposure value set to: " << newExposure << endl;
+                        else
+                            cout << "WARNING: Could not set exposure value. Current exposure: "
+                                 << newExposure << endl;
+                    }
+                }
+            }
+
+            // If not playback, set gain value (default: 100)
+            if (!oniPlayback)
+            {
+                if (gainChange)
+                {
+                    if (autoExposureON || autoWhiteBalanceON)
+                    {
+                        cout << "WARNING: Gain cannot be set with Auto Exposure and Auto White Balance on" << endl;
+                    }
+                    else
+                    {
+                        openni::Status result = imageStream.getCameraSettings()->setGain(gain);
+                        int newGain =  imageStream.getCameraSettings()->getGain();
+                        if (result == openni::STATUS_OK && gain == newGain)
+                            cout << "Gain value set to: " << newGain << endl;
+                        else
+                            cout << "WARNING: Could not set gain value. Current gain: "
+                                 << newGain << endl;
+                    }
+                }
+            }
+
             if (oniRecord) {
                 recorder.attach(imageStream);
             }
@@ -345,8 +395,8 @@ int OpenNI2SkeletonTracker::init(){
             {
                 if (depthModes[i].getPixelFormat() == openni::PIXEL_FORMAT_DEPTH_1_MM)
                 {
-                    printf("%i: %ix%i, %i fps\n", i, depthModes[i].getResolutionX(), depthModes[i].getResolutionY(), depthModes[i].getFps()); 
-            
+                    printf("%i: %ix%i, %i fps\n", i, depthModes[i].getResolutionX(), depthModes[i].getResolutionY(), depthModes[i].getFps());
+
                 }
             }
 
@@ -358,7 +408,7 @@ int OpenNI2SkeletonTracker::init(){
                 for (int i = 0; i<colorModes.getSize(); i++) {
                     if (colorModes[i].getPixelFormat() == openni::PIXEL_FORMAT_RGB888)
                     {
-                        printf("%i: %ix%i, %i fps\n", i, colorModes[i].getResolutionX(), colorModes[i].getResolutionY(), colorModes[i].getFps()); 
+                        printf("%i: %ix%i, %i fps\n", i, colorModes[i].getResolutionX(), colorModes[i].getResolutionY(), colorModes[i].getFps());
                     }
                 }
             }

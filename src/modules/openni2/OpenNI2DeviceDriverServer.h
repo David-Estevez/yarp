@@ -78,6 +78,9 @@ public:
 // #endif
     virtual ImageOf<PixelRgb> getImageFrame();
     virtual ImageOf<PixelMono16> getDepthFrame();
+
+    static const int DEFAULT_EXPOSURE = 0;
+    static const int DEFAULT_GAIN = 100;
 private:
     BufferedPort<Bottle> *skeletonPort;
     BufferedPort<Bottle> *receivingPort;
@@ -87,6 +90,8 @@ private:
     bool withOpenPorts, userTracking, colorON, depthMirrorON, rgbMirrorON;
     bool oniPlayback, oniRecord, loop, frameSync, imageRegistration;
     bool autoWhiteBalanceON, autoExposureON;
+    bool withChangedExposure, withChangedGain;
+    int exposure, gain;
     string fileDevice;
     string oniOutputFile;
 
