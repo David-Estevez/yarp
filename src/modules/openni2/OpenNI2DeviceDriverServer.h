@@ -84,7 +84,9 @@ private:
     BufferedPort<yarp::sig::ImageOf<yarp::sig::PixelMono16> > *depthFramePort;
     BufferedPort<yarp::sig::ImageOf<yarp::sig::PixelRgb> > *imageFramePort;
     OpenNI2SkeletonTracker *skeleton;
-    bool withOpenPorts, userTracking, colorON, depthMirrorON, rgbMirrorON, oniPlayback, oniRecord, loop, frameSync, imageRegistration;
+    bool withOpenPorts, userTracking, colorON, depthMirrorON, rgbMirrorON;
+    bool oniPlayback, oniRecord, loop, frameSync, imageRegistration;
+    bool autoWhiteBalanceON, autoExposureON;
     string fileDevice;
     string oniOutputFile;
 

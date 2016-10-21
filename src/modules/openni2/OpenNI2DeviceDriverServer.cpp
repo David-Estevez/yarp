@@ -220,7 +220,19 @@ bool yarp::dev::OpenNI2DeviceDriverServer::open(yarp::os::Searchable& config) {
         imageRegistration = false;
     }
 
-    skeleton = new OpenNI2SkeletonTracker(userTracking, colorON, rgbMirrorON, depthMirrorON, mConf, oniPlayback, fileDevice, oniRecord, oniOutputFile, loop, frameSync, imageRegistration, printMode, dMode, cMode);
+    if(config.check("noAutoWhiteBalance", "Disable Auto White Balance")) {
+        autoWhiteBalanceON = false;
+    } else {
+        autoWhiteBalanceON = true;
+    }
+
+    if(config.check("noAutoExposure", "Disable Auto Exposure")) {
+        autoExposureON = false;
+    } else {
+        autoExposureON = true;
+    }
+
+    skeleton = new OpenNI2SkeletonTracker(userTracking, colorON, rgbMirrorON, depthMirrorON, mConf, oniPlayback, fileDevice, oniRecord, oniOutputFile, loop, frameSync, imageRegistration, printMode, dMode, cMode, autoWhiteBalanceON, autoExposureON);
 
     if (skeleton->getDeviceStatus() == 0) {
         cout << "OpenNI2 Yarp Device started." << endl;

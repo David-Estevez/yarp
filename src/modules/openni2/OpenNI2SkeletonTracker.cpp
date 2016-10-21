@@ -12,7 +12,12 @@
 
 OpenNI2SkeletonTracker::SensorStatus *OpenNI2SkeletonTracker::sensorStatus;
 
-OpenNI2SkeletonTracker::OpenNI2SkeletonTracker(bool withTracking, bool withColorOn, bool withRgbMirrorOn, bool withDepthMirrorOn, double minConf, bool withOniPlayback, string withFileDevice, bool withOniRecord, string withOniOutputFile, bool withLoop, bool withFrameSync, bool withImageRegistration, bool prMode, int depthMode, int colorMode)
+OpenNI2SkeletonTracker::OpenNI2SkeletonTracker(bool withTracking, bool withColorOn, bool withRgbMirrorOn,
+                                               bool withDepthMirrorOn, double minConf, bool withOniPlayback,
+                                               string withFileDevice, bool withOniRecord, string withOniOutputFile,
+                                               bool withLoop, bool withFrameSync, bool withImageRegistration,
+                                               bool prMode, int depthMode, int colorMode,
+                                               bool withAutoWhiteBalanceON, bool withAutoExposureON)
 {
     userTracking= withTracking;
     colorON = withColorOn;
@@ -44,6 +49,8 @@ OpenNI2SkeletonTracker::OpenNI2SkeletonTracker(bool withTracking, bool withColor
     frameSync = withFrameSync;
     printMode = prMode;
     imageRegistration = withImageRegistration;
+    autoExposureON = withAutoExposureON;
+    autoWhiteBalanceON = withAutoWhiteBalanceON;
     init();
     initVars();
 }
@@ -262,9 +269,51 @@ int OpenNI2SkeletonTracker::init(){
                    cout << "RGB stream mirroring: OFF" << endl;
                }
             }
-               
+
+            // If not playback, set Auto White Balance (default: on)
+            if (!oniPlayback)
+            {
+                openni::Status result =  imageStream.getCameraSettings()->setAutoWhiteBalanceEnabled(autoWhiteBalanceON);
+
+                if (result == openni::STATUS_OK)
+                {
+                    if (autoWhiteBalanceON)
+                        cout << "Auto White Balance: ON" << endl;
+                    else
+                        cout << "Auto White Balance: OFF" << endl;
+                }
+                else
+                {
+                    if (autoWhiteBalanceON)
+                        cout << "WARNING: Could not turn on Auto White Balance" << endl;
+                    else
+                        cout << "WARNING: Could not turn off Auto White Balance" << endl;
+                }
+            }
+
+            // If not playback, set AutoExposure (default: on)
+            if (!oniPlayback)
+            {
+                openni::Status result = imageStream.getCameraSettings()->setAutoExposureEnabled(autoExposureON);
+
+                if (result == openni::STATUS_OK)
+                {
+                    if (autoExposureON)
+                        cout << "Auto Exposure: ON" << endl;
+                    else
+                        cout << "Auto Exposure: OFF" << endl;
+                }
+                else
+                {
+                    if (autoExposureON)
+                        cout << "WARNING: Could not turn on Auto Exposure" << endl;
+                    else
+                        cout << "WARNING: Could not turn off Auto Exposure" << endl;
+                }
+            }
+
             if (oniRecord) {
-            recorder.attach(imageStream);
+                recorder.attach(imageStream);
             }
 
             rc = imageStream.start();

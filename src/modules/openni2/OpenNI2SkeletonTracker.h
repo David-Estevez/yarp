@@ -70,7 +70,14 @@ public:
     /**
      * @param userDetection indicates if user callbacks and skeleton tracking should be on
      */
-    OpenNI2SkeletonTracker(bool withTracking = false, bool withColorON = true, bool witRgbMirrorON = false, bool withDepthMirrorON = false, double minConf = MINIMUM_CONFIDENCE, bool withOniPlayback = false, string withFileDevice = "", bool withOniRecord  = false, string withOniOutputFile = "", bool withLoop = false, bool withFrameSync = false, bool withImageRegistration = false, bool prMode = false, int depthMode = DEFAULT_DEPTH_MODE, int colorMode = DEFAULT_COLOR_MODE);
+    OpenNI2SkeletonTracker(bool withTracking = false, bool withColorON = true, bool witRgbMirrorON = false,
+                           bool withDepthMirrorON = false, double minConf = MINIMUM_CONFIDENCE,
+                           bool withOniPlayback = false, string withFileDevice = "", bool withOniRecord  = false,
+                           string withOniOutputFile = "", bool withLoop = false, bool withFrameSync = false,
+                           bool withImageRegistration = false,
+                           bool prMode = false, int depthMode = DEFAULT_DEPTH_MODE, int colorMode = DEFAULT_COLOR_MODE,
+                           bool withAutoWhiteBalanceON = true, bool withAutoExposureON = true);
+
     ~OpenNI2SkeletonTracker(void);
     void close();
     /**
@@ -87,7 +94,11 @@ public:
     static SensorStatus *getSensor();
 private:
     static SensorStatus *sensorStatus;
-    bool userTracking, colorON, rgbMirrorON, depthMirrorON, oniPlayback, oniRecord, loop, frameSync, imageRegistration, printMode;
+    bool userTracking;
+    bool colorON, rgbMirrorON, depthMirrorON;
+    bool oniPlayback, oniRecord;
+    bool loop, frameSync, imageRegistration, printMode;
+    bool autoExposureON, autoWhiteBalanceON;
     int deviceStatus;
     double minConfidence;
     string fileDevice;
