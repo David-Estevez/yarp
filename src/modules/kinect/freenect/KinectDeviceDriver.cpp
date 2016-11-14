@@ -33,9 +33,9 @@ bool KinectDeviceDriver::open(const KinectDeviceDriverSettings & cfg) {
   }
 
   kinect = this; // set global pointer
-  //cams_init(dev, depthimg, rgbimg);
+  cams_init(dev, depthimg, rgbimg);
 
-  #error "not sure how cams_init is implemented now"
+  //#error "not sure how cams_init is implemented now"
 
   // start usb grabbing thread
   usbSpinThread_.start();
