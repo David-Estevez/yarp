@@ -12,7 +12,15 @@ if(COMPILE_DEVICE_LIBRARY)
                       WRAPPER primesensecamera)
 endif()
 
+# Force kinect compilation
+set(SKIP_primesensecamera FALSE)
+set(SKIP_kinect FALSE)
+message("Kinect: " ${SKIP_primesensecamera} " - " ${SKIP_kinect})
+find_package(Libusb1 REQUIRED)
+
 if(NOT SKIP_primesensecamera OR NOT SKIP_kinect)
+  message("Kinect theoretically enabled")
+  message("" ${Libusb1_INCLUDE_DIRS})
   get_property(YARP_OS_INCLUDE_DIRS TARGET YARP_OS PROPERTY INCLUDE_DIRS)
   get_property(YARP_sig_INCLUDE_DIRS TARGET YARP_sig PROPERTY INCLUDE_DIRS)
   get_property(YARP_dev_INCLUDE_DIRS TARGET YARP_dev PROPERTY INCLUDE_DIRS)
@@ -36,7 +44,7 @@ if(NOT SKIP_primesensecamera OR NOT SKIP_kinect)
                                YARP_dev
                                ${LIBFREENECT_LIBRARIES}
                                ${USB_LIBRARIES})
-  yarp_install(TARGETS kinect
+  yarp_install(TARGETS yarp_kinect
                EXPORT YARP
                COMPONENT runtime
                LIBRARY DESTINATION ${YARP_DYNAMIC_PLUGINS_INSTALL_DIR}
