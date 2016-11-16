@@ -25,6 +25,7 @@ target_link_libraries(KinectYarpDeviceClientLib YARP_OS
                                                 YARP_sig
                                                 YARP_dev)
 install(TARGETS KinectYarpDeviceClientLib
+        EXPORT YARP
         COMPONENT runtime
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
