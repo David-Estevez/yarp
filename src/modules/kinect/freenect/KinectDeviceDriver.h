@@ -38,28 +38,11 @@ class yarp::dev::KinectDeviceDriverSettings { };
 
 class yarp::dev::KinectDeviceDriver : public DeviceDriver {
 public:
-  KinectDeviceDriver() :
-    width_(640),
-    height_(480),
-    maxRange_(5.), // XXX not sure
-    horizontalFOV_(57.),
-    verticalFOV_(43.) {
-      rgbBuf_ = new uint8_t[width_*height_*3];
-      depthBuf_ = new uint16_t[width_*height_];
-      depthSent_ = true; // no new data available yet
-      rgbSent_ = true;
-    }
+  KinectDeviceDriver();
 
-  virtual ~KinectDeviceDriver() {
-    close();
-    // clear up internal memory buffers
-    if(rgbBuf_) { delete [] rgbBuf_; rgbBuf_ = 0; }
-    if(depthBuf_) { delete [] depthBuf_; depthBuf_ = 0; }
-  }
+  virtual ~KinectDeviceDriver();
 
-  virtual bool open(yarp::os::Searchable& config) {
-    return open(cfg_);
-  }
+  virtual bool open(yarp::os::Searchable& config);
 
   /**
    * Configure the device.
@@ -73,29 +56,7 @@ public:
    * Get an image pair (depth and intensity images) from the kinect camera.
    * @return true/false upon success/failure
    */
-  bool getImagePair(yarp::os::PortablePair<yarp::sig::ImageOf<yarp::sig::PixelMono16>, yarp::sig::ImageOf<yarp::sig::PixelRgb> > & pair) {
-    pair.head.resize(width_,height_);
-    pair.body.resize(width_,height_);
-
-    depthMutex_.wait();
-    // must transfer row by row, since YARP may use padding
-    for (int i=0; i<height_; i++) {
-      // depth image (1 layer)
-      memcpy((unsigned char *)(&pair.head.pixel(0,i)),&depthBuf_[width_*i],width_*sizeof(uint16_t));
-    }
-    depthSent_ = true;
-    depthMutex_.post();
-
-    rgbMutex_.wait();
-    for (int i=0; i<height_; i++) {
-      // rgb image (3 layers), requires PixelRgb return value
-      memcpy((unsigned char *)(&pair.body.pixel(0,i)),&rgbBuf_[i*width_*3],width_*3);
-    }
-    rgbSent_ = true;
-    rgbMutex_.post();
-
-    return true;
-  }
+  bool getImagePair(yarp::os::PortablePair<yarp::sig::ImageOf<yarp::sig::PixelMono16>, yarp::sig::ImageOf<yarp::sig::PixelRgb> > & pair);
 
   /**
    * Check whether new depth or rgb data have been retrieved from device.
@@ -136,30 +97,19 @@ public:
   /**
    * Depth and rgb callbacks fill internal image buffers
    */
-  void depthImgCb(uint16_t *buf) {
-    depthMutex_.wait();
-    depthSent_ = false; // new depth data available
-    memcpy(depthBuf_, buf, width_*height_*sizeof(uint16_t));
-    depthMutex_.post();
-  }
-
-  void rgbImgCb(uint8_t *buf) {
-    rgbMutex_.wait();
-    rgbSent_ = false; // new rgb data available
-    memcpy(rgbBuf_, buf, width_*height_*3);
-    rgbMutex_.post();
-  }
+  void depthImgCb(freenect_device *dev, void *data, uint32_t timestamp);
+  void rgbImgCb(freenect_device *dev, void *data, uint32_t timestamp);
 
 private:
   //! driver settings (empty for now)
   yarp::dev::KinectDeviceDriverSettings cfg_;
 
   //! fixed device properties
-  const int width_;
-  const int height_;
-  const double maxRange_;
-  const double horizontalFOV_;
-  const double verticalFOV_;
+  static const int width_;
+  static const int height_;
+  static const double maxRange_;
+  static const double horizontalFOV_;
+  static const double verticalFOV_;
 
   //! depth and rgb buffers from the kinect camera
   yarp::os::Semaphore depthMutex_;
@@ -170,15 +120,30 @@ private:
   bool depthSent_;
   bool rgbSent_;
 
+  //! Kinect-related objects
+  freenect_context* fn_ctx;
+  freenect_device* fn_dev;
+
   /**
    * Handle interaction with USB driver and fill internal image buffers
    */
   class USBThread : public yarp::os::Thread {
   public:
+    USBThread() {
+        fn_ctx = NULL;
+    }
+
+    void setContext(freenect_context* fn_ctx){
+        this->fn_ctx = fn_ctx;
+    }
+
     virtual void run() {
       // XXX Time::delay may interfere with USB read?!
-      while(!isStopping() && libusb_handle_events(NULL) == 0);
+      while(!isStopping() && freenect_process_events(fn_ctx) >= 0);
     }
+
+  private:
+    freenect_context* fn_ctx;
   } usbSpinThread_;
 };
 
