@@ -32,7 +32,7 @@ static void rgbimg(freenect_device *dev, void *data, uint32_t timestamp) {
 }
 
 KinectDeviceDriver::KinectDeviceDriver() {
-
+    printf("Kinect!\n");
     rgbBuf_ = new uint8_t[width_*height_*3];
     depthBuf_ = new uint16_t[width_*height_];
     depthSent_ = true; // no new data available yet
@@ -53,6 +53,7 @@ bool KinectDeviceDriver::open(yarp::os::Searchable &config) {
 }
 
 bool KinectDeviceDriver::open(const KinectDeviceDriverSettings & cfg) {
+    printf("Open!\n");
     kinect = this; // set global pointer
 
     // Initialize libfreenect

@@ -4,12 +4,15 @@
 if(COMPILE_DEVICE_LIBRARY)
   yarp_prepare_device(primesensecamera
                       TYPE yarp::dev::ServerKinect
-                      INCLUDE "ServerKinect.h"
-                      WRAPPER primesensecamera)
+                      INCLUDE "ServerKinect.h")
+                      #WRAPPER primesensecamera)
   yarp_prepare_device(kinect
                       TYPE yarp::dev::KinectDeviceDriver
-                      INCLUDE "KinectDeviceDriver.h"
-                      WRAPPER primesensecamera)
+                      INCLUDE "KinectDeviceDriver.h")
+                      #WRAPPER primesensecamera)
+  yarp_install(FILES freenect.ini
+               COMPONENT runtime
+               DESTINATION ${YARP_PLUGIN_MANIFESTS_INSTALL_DIR})
 endif()
 
 # Force kinect compilation
@@ -20,7 +23,6 @@ find_package(Libusb1 REQUIRED)
 
 if(NOT SKIP_primesensecamera OR NOT SKIP_kinect)
   message("Kinect theoretically enabled")
-  message("" ${Libusb1_INCLUDE_DIRS})
   get_property(YARP_OS_INCLUDE_DIRS TARGET YARP_OS PROPERTY INCLUDE_DIRS)
   get_property(YARP_sig_INCLUDE_DIRS TARGET YARP_sig PROPERTY INCLUDE_DIRS)
   get_property(YARP_dev_INCLUDE_DIRS TARGET YARP_dev PROPERTY INCLUDE_DIRS)
