@@ -19,16 +19,16 @@ const double KinectDeviceDriver::horizontalFOV_= 57.;
 const double KinectDeviceDriver::verticalFOV_ = 43.;
 
 //! Global pointer for callback functions
-KinectDeviceDriver *kinect;
+KinectDeviceDriver *kinectPtr;
 
 //! Depth callback for libfreenect's C interface
 static void depthimg(freenect_device *dev, void *data, uint32_t timestamp) {
-  kinect->depthImgCb(dev, data, timestamp);
+  kinectPtr->depthImgCb(dev, data, timestamp);
 }
 
 //! Rgb callback for libfreenect's C interface
 static void rgbimg(freenect_device *dev, void *data, uint32_t timestamp) {
-  kinect->rgbImgCb(dev, data, timestamp);
+  kinectPtr->rgbImgCb(dev, data, timestamp);
 }
 
 KinectDeviceDriver::KinectDeviceDriver() {
@@ -54,7 +54,7 @@ bool KinectDeviceDriver::open(yarp::os::Searchable &config) {
 
 bool KinectDeviceDriver::open(const KinectDeviceDriverSettings & cfg) {
     printf("Open!\n");
-    kinect = this; // set global pointer
+    kinectPtr = this; // set global pointer
 
     // Initialize libfreenect
     int ret = freenect_init(&fn_ctx, NULL);
@@ -131,7 +131,7 @@ bool KinectDeviceDriver::close() {
   freenect_close_device(fn_dev);
   freenect_shutdown(fn_ctx);
 
-  kinect = NULL;
+  kinectPtr = NULL;
   return true;
 }
 
