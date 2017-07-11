@@ -43,6 +43,8 @@ typedef struct {
 #define VOCAB_HAS                       VOCAB3('h','a','s')
 #define VOCAB_FEATURE                   VOCAB4('f','e','a','t')
 #define VOCAB_FEATURE2                  VOCAB4('f','e','a','2')
+#define VOCAB_FEAT_LIMITS               VOCAB4('l','i','m','s')
+#define VOCAB_FEAT_LIMITS2              VOCAB4('l','i','m','2')
 #define VOCAB_ONOFF                     VOCAB4('o','n','o','f')
 #define VOCAB_AUTO                      VOCAB4('a','u','t','o')
 #define VOCAB_MANUAL                    VOCAB3('m','a','n')
