@@ -118,6 +118,15 @@ public:
     virtual bool getFeature(int feature, double *value)=0;
 
     /**
+     * Get the limits for the requested feature.
+     * @param feature the identifier of the feature to read
+     * @param minValue lower limit of the feature
+     * @param maxValue upper limit of the feature
+     * @return returns true on success, false on failure
+     */
+    virtual bool getFeatureLimits(int feature, double *minValue, double *maxValue)=0;
+
+    /**
      * Set the requested feature to a value using 2 params (like white balance)
      * @param feature the identifier of the feature to change
      * @param value1  first param,  from 0 to 1 expressed as a percentage
@@ -129,12 +138,23 @@ public:
 
     /**
      * Get the current value for the requested feature.
-     * @param feature the identifier of the feaature to read
+     * @param feature the identifier of the feature to read
      * @param value1  returns the current value of the feature, from 0 to 1 expressed as a percentage
      * @param value2  returns the current value of the feature, from 0 to 1 expressed as a percentage
      * @return returns true on success, false on failure.
      */
     virtual bool getFeature(int feature, double *value1, double *value2)=0;
+
+    /**
+     * Get the limits for the requested feature.
+     * @param feature the identifier of the feature to read
+     * @param minValue1 lower limit of the first param of the feature
+     * @param maxValue1 upper limit of the first param of the feature
+     * @param minValue2 lower limit of the second param of the feature
+     * @param maxValue2 upper limit of the second param of the feature
+     * @return returns true on success, false on failure.
+     */
+    virtual bool getFeatureLimits(int feature, double *minValue1, double *maxValue1, double *minValue2, double *maxValue2)=0;
 
     /**
      * Check if the camera has the ability to turn on/off the requested feature
