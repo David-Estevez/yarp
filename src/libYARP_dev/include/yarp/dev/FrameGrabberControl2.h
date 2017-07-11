@@ -104,7 +104,7 @@ public:
     /**
      * Set the requested feature to a value (saturation, brightness ... )
      * @param feature the identifier of the feature to change
-     * @param value new value of the feature, range from 0 to 1 expressed as a percentage
+     * @param value new value of the feature
      * @return returns true if success, false otherwise (e.g. the interface is not implemented)
      */
     virtual bool setFeature(int feature, double value)=0;
@@ -112,7 +112,7 @@ public:
     /**
      * Get the current value for the requested feature.
      * @param feature the identifier of the feature to read
-     * @param value  pointer to current value of the feature, from 0 to 1 expressed as a percentage
+     * @param value  pointer to current value of the feature
      * @return returns true on success, false on failure.
      */
     virtual bool getFeature(int feature, double *value)=0;
@@ -129,8 +129,8 @@ public:
     /**
      * Set the requested feature to a value using 2 params (like white balance)
      * @param feature the identifier of the feature to change
-     * @param value1  first param,  from 0 to 1 expressed as a percentage
-     * @param value2  second param, from 0 to 1 expressed as a percentage
+     * @param value1  first param
+     * @param value2  second param
      *
      * @return returns true if success, false otherwise (e.g. the interface is not implemented)
      */
@@ -139,8 +139,8 @@ public:
     /**
      * Get the current value for the requested feature.
      * @param feature the identifier of the feature to read
-     * @param value1  returns the current value of the feature, from 0 to 1 expressed as a percentage
-     * @param value2  returns the current value of the feature, from 0 to 1 expressed as a percentage
+     * @param value1  returns the current value of the feature
+     * @param value2  returns the current value of the feature
      * @return returns true on success, false on failure.
      */
     virtual bool getFeature(int feature, double *value1, double *value2)=0;
