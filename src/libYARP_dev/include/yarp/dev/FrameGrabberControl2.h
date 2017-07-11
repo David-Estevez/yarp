@@ -22,7 +22,8 @@ namespace yarp{
 typedef enum {
     BUS_UNKNOWN = 0,
     BUS_FIREWIRE,
-    BUS_USB
+    BUS_USB,
+    BUS_GIGE
 } BusType;
 
 typedef enum {
@@ -70,6 +71,9 @@ public:
             case BUS_USB:
                 return "USB";
             break;
+
+            case BUS_GIGE:
+                return "GigE";
 
             default:
                 return "bus type undefined";
