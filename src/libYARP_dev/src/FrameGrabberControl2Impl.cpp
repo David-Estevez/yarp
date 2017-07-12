@@ -82,6 +82,20 @@ bool FrameGrabberControls2_Sender::getFeature(int feature, double* value)
     return ret;
 }
 
+bool FrameGrabberControls2_Sender::getFeatureLimits(int feature, double *minValue, double *maxValue)
+{
+    yarp::os::Bottle cmd, response;
+    cmd.addVocab(VOCAB_FRAMEGRABBER_CONTROL2);
+    cmd.addVocab(VOCAB_GET);
+    cmd.addVocab(VOCAB_FEAT_LIMITS);
+    cmd.addInt(feature);
+    bool ret = _port.write(cmd,response);
+
+    *minValue = response.get(3).asDouble();
+    *maxValue = response.get(4).asDouble();
+    return ret;
+}
+
 bool FrameGrabberControls2_Sender::getFeature(int feature, double *value1, double *value2)
 {
     yarp::os::Bottle cmd, response;
@@ -93,6 +107,22 @@ bool FrameGrabberControls2_Sender::getFeature(int feature, double *value1, doubl
 
     *value1 = response.get(3).asDouble();
     *value2 = response.get(4).asDouble();
+    return ret;
+}
+
+bool FrameGrabberControls2_Sender::getFeatureLimits(int feature, double *minValue1, double *maxValue1, double *minValue2, double *maxValue2)
+{
+    yarp::os::Bottle cmd, response;
+    cmd.addVocab(VOCAB_FRAMEGRABBER_CONTROL2);
+    cmd.addVocab(VOCAB_GET);
+    cmd.addVocab(VOCAB_FEAT_LIMITS2);
+    cmd.addInt(feature);
+    bool ret = _port.write(cmd,response);
+
+    *minValue1 = response.get(3).asDouble();
+    *maxValue1 = response.get(4).asDouble();
+    *minValue2 = response.get(5).asDouble();
+    *maxValue2 = response.get(6).asDouble();
     return ret;
 }
 

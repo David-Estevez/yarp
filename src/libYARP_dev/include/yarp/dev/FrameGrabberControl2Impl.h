@@ -37,8 +37,10 @@ public:
     virtual bool hasFeature(int feature, bool *hasFeature) YARP_OVERRIDE;
     virtual bool setFeature(int feature, double value) YARP_OVERRIDE;
     virtual bool getFeature(int feature, double *value) YARP_OVERRIDE;
+    virtual bool getFeatureLimits(int feature, double *minValue, double *maxValue) YARP_OVERRIDE;
     virtual bool setFeature(int feature, double value1, double value2) YARP_OVERRIDE;
     virtual bool getFeature(int feature, double *value1, double *value2) YARP_OVERRIDE;
+    virtual bool getFeatureLimits(int feature, double *minValue1, double *maxValue1, double *minValue2, double *maxValue2) YARP_OVERRIDE;
     virtual bool hasOnOff(int feature, bool *HasOnOff) YARP_OVERRIDE;
     virtual bool setActive(int feature, bool onoff) YARP_OVERRIDE;
     virtual bool getActive(int feature, bool *isActive) YARP_OVERRIDE;
