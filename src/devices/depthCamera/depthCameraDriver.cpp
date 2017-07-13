@@ -1158,7 +1158,7 @@ bool depthCameraDriver::setFeature(int feature, double value)
         break;
     }
     case YARP_FEATURE_WHITE_BALANCE:
-        yError() << "no manual mode for white_balance. call hasManual() to know if a specific feature support Manual mode instead of wasting my time";
+        yError() << "no manual mode for white_balance. call hasManual() to know if a specific feature support Manual mode";
         return false;
     default:
         yError() << "feature not supported!";
@@ -1197,15 +1197,36 @@ bool depthCameraDriver::getFeature(int feature, double *value)
     return true;
 }
 
+bool depthCameraDriver::getFeatureLimits(int feature, double *minValue, double *maxValue)
+{
+    bool b;
+    if (!hasFeature(feature, &b) || !b)
+    {
+        yError() << "feature not supported!";
+        return false;
+    }
+
+    // This device takes always values between 0 and 1 for any supported feature
+    *minValue = 0;
+    *maxValue = 0;
+    return true;
+}
+
 bool depthCameraDriver::setFeature(int feature, double value1, double value2)
 {
-    yError() << "no 2-valued feature are supported";
+    yError() << "2-valued features are not supported";
     return false;
 }
 
 bool depthCameraDriver::getFeature(int feature, double *value1, double *value2)
 {
-    yError() << "no 2-valued feature are supported";
+    yError() << "2-valued features are not supported";
+    return false;
+}
+
+bool depthCameraDriver::getFeatureLimits(int feature, double* minValue1, double* maxValue1, double* minValue2, double* maxValue2)
+{
+    yError() << "2-valued features are not supported";
     return false;
 }
 

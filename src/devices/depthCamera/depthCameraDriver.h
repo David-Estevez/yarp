@@ -244,8 +244,10 @@ public:
     virtual bool   hasFeature(int feature, bool*   hasFeature) override;
     virtual bool   setFeature(int feature, double  value) override;
     virtual bool   getFeature(int feature, double* value) override;
+    virtual bool   getFeatureLimits(int feature, double* minValue, double* maxValue) override;
     virtual bool   setFeature(int feature, double  value1,  double  value2) override;
     virtual bool   getFeature(int feature, double* value1,  double* value2) override;
+    virtual bool   getFeatureLimits(int feature, double* minValue1, double* maxValue1, double* minValue2, double* maxValue2) override;
     virtual bool   hasOnOff(  int feature, bool*   HasOnOff) override;
     virtual bool   setActive( int feature, bool    onoff) override;
     virtual bool   getActive( int feature, bool*   isActive) override;
