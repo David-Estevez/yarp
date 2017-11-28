@@ -394,12 +394,31 @@ bool FrameGrabberControls2_Parser::respond(const yarp::os::Bottle& cmd, yarp::os
                     response.addDouble(value);
                 } break;
 
+
+                case VOCAB_FEAT_LIMITS:
+                {
+                    double minValue, maxValue;
+                    ok = fgCtrl2->getFeatureLimits(cmd.get(3).asInt(), &minValue, &maxValue);
+                    response.addDouble(minValue);
+                    response.addDouble(maxValue);
+                } break;
+
                 case VOCAB_FEATURE2:
                 {
                     double value1, value2;
                     ok = fgCtrl2->getFeature(cmd.get(3).asInt(), &value1, &value2);
                     response.addDouble(value1);
                     response.addDouble(value2);
+                } break;
+
+                case VOCAB_FEAT_LIMITS2:
+                {
+                    double minValue1, maxValue1, minValue2, maxValue2;
+                    ok = fgCtrl2->getFeatureLimits(cmd.get(3).asInt(), &minValue1, &maxValue1, &minValue2, &maxValue2);
+                    response.addDouble(minValue1);
+                    response.addDouble(maxValue1);
+                    response.addDouble(minValue2);
+                    response.addDouble(maxValue2);
                 } break;
 
                 case VOCAB_ACTIVE:
